@@ -148,7 +148,7 @@ docker compose down -v
 
 ## 📚 References
 
-- [nostr-rs-relay GitHub](https://github.com/scsibug/nostr-rs-relay)
+- [nostr-rs-relay](https://github.com/scsibug/nostr-rs-relay)
 - [Nostr Documentation](https://github.com/nostr-protocol/nostr)
 - [Caddy Documentation](https://caddyserver.com/docs/)
 - [Umbrel Documentation](https://github.com/getumbrel/umbrel)
