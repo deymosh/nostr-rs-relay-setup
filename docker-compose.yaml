@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  public-relay:
+    build: ./nostr-rs-relay
+    image: nostr-rs-relay
+    restart: on-failure
+    volumes:
+      - ./config.toml:/usr/src/app/config.toml
+      - ./favicon.ico:/usr/src/app/favicon.ico
+      - type: bind
+        source: ./relay_data
+        target: /usr/src/app/db
+    container_name: public-relay
+    networks:
+      - caddy
+
+  web:
+    image: getumbrel/umbrel-nostr-relay
+    build: .
+    user: "1000:1000"
+    container_name: public-relay-web
+    restart: on-failure
+    environment:
+      RELAY_HOST: "public-relay"
+      RELAY_PORT: "8080"
+    # port 3000 web
+    networks:
+      - caddy
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - caddy
+      - default
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data/data:/data
+      - ./caddy_data/config:/config
+    restart: unless-stopped
+
+networks:
+  caddy:
+    name: caddy
