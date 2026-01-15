@@ -16,8 +16,8 @@ services:
       - caddy
 
   web:
-    image: getumbrel/umbrel-nostr-relay
-    build: .
+    build: ./nostr-relay-dashboard
+    image: nostr-relay-dashboard
     user: "1000:1000"
     container_name: public-relay-web
     restart: on-failure
