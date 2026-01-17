@@ -1,12 +1,13 @@
 # Nostr Relay - Docker Compose Edition
 
-A **production-ready** dockerized deployment of [nostr-rs-relay](https://github.com/scsibug/nostr-rs-relay) with Umbrel web interface and Caddy reverse proxy included.
+A **production-ready** dockerized deployment of [nostr-rs-relay](https://github.com/scsibug/nostr-rs-relay) with a tor hidden service and web dashboard.
 
 ## 🎯 Features
 
 - **Fully functional Nostr relay** based on nostr-rs-relay
-- **Intuitive web interface** with Umbrel for monitoring and management
+- **Intuitive web interface** for monitoring and management
 - **Automatic HTTPS** with Let's Encrypt via Caddy
+- **Tor integration** with Onion hidden service
 - **Instant setup** - only 3 steps to get started
 - **Fully dockerized** - no external dependencies
 - **Persistent database** with SQLite
@@ -17,8 +18,30 @@ A **production-ready** dockerized deployment of [nostr-rs-relay](https://github.
 - [Git](https://git-scm.com/)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- Your own domain (optional - works with dynamic domains like `NoIP`)
-- Ports 80 and 443 accessible from the internet
+- **Tor is integrated by default** (hidden service automatically generated)
+
+## 🧅 Tor Hidden Service (Built-in)
+
+Tor is **automatically included** in this setup with Onion hidden service support enabled:
+
+- **Always enabled** - Tor runs in its own container by default
+- **Zero configuration** - Hidden service is automatically generated on first run
+- **Access your relay anonymously** via `.onion` address
+- **Get your onion address** after the services start:
+
+```bash
+# Retrieve your .onion address
+docker compose exec nostr-relay-dashboard cat /var/lib/tor/hidden_service/hostname
+```
+
+```bash
+# Backing up all tor data
+docker cp nostr-relay-dashboard:/var/lib/tor ./tor_data
+```
+
+**Your relay will be accessible via:**
+- 🌐 **Clearnet:** `wss://your.domain.com`
+- 🧅 **Tor (Onion):** `ws://your-address.onion`
 
 ## 🚀 Quick Setup
 
@@ -88,17 +111,15 @@ Done! Your relay will be available at:
 
 | Service | Function | Internal Port | Access |
 |---------|----------|-----------------|--------|
-| **public-relay** | Nostr relay (nostr-rs-relay) | 8080 | Through Caddy |
-| **public-relay-web** | Umbrel Dashboard | 3000 | Through Caddy |
-| **caddy** | Reverse proxy + HTTPS | 80, 443 | Public |
+| **nostr-relay** | Nostr relay (nostr-rs-relay) | 8080 | Through Caddy |
+| **web-dashboard** | Tor hidden service + Caddy | 9050, 9051 | Internal |
 
 ## 📁 Important Files
 
 - `config.toml` - Relay configuration (copy from nostr-rs-relay)
-- `Caddyfile` - Reverse proxy configuration (customize)
 - `docker-compose.yaml` - Service orchestration
 - `relay_data/` - Persistent database (SQLite)
-- `caddy_data/` - SSL certificates and Caddy data
+- `tor_data/` - For backing up Tor hidden service data (manual backup needed)
 
 ## 🔧 Customization
 
@@ -151,7 +172,6 @@ docker compose down -v
 - [nostr-rs-relay](https://github.com/scsibug/nostr-rs-relay)
 - [Nostr Documentation](https://github.com/nostr-protocol/nostr)
 - [Caddy Documentation](https://caddyserver.com/docs/)
-- [Umbrel Documentation](https://github.com/getumbrel/umbrel)
 
 ## 📝 License
 
