@@ -6,7 +6,6 @@ A **production-ready** dockerized deployment of [nostr-rs-relay](https://github.
 
 - **Fully functional Nostr relay** based on nostr-rs-relay
 - **Intuitive web interface** for monitoring and management
-- **Automatic HTTPS** with Let's Encrypt via Caddy
 - **Tor integration** with Onion hidden service
 - **Instant setup** - only 3 steps to get started
 - **Fully dockerized** - no external dependencies
@@ -40,7 +39,6 @@ docker cp nostr-relay-dashboard:/var/lib/tor ./tor_data
 ```
 
 **Your relay will be accessible via:**
-- 🌐 **Clearnet:** `wss://your.domain.com`
 - 🧅 **Tor (Onion):** `ws://your-address.onion`
 
 ## 🚀 Quick Setup
@@ -53,30 +51,7 @@ cd nostr-rs-relay-setup
 git submodule update --init --recursive
 ```
 
-### Step 1: Configure the Caddyfile
-
-```bash
-cp Caddyfile.default Caddyfile
-```
-
-Edit `Caddyfile` and replace the values:
-
-```caddy
-{
-    email your@email.com  # Email for Let's Encrypt certificates
-}
-
-# Replace these domains with yours
-your.domain.com {
-    reverse_proxy public-relay:8080
-}
-
-dashboard.your.domain.com {
-    reverse_proxy public-relay-web:3000
-}
-```
-
-### Step 2: Configure the Relay
+### Step 1: Configure the Relay
 
 ```bash
 cp nostr-rs-relay/config.toml config.toml
@@ -97,15 +72,15 @@ address = "0.0.0.0"
 port = 8080
 ```
 
-### Step 3: Start the services
+### Step 2: Start the services
 
 ```bash
 docker compose up
 ```
 
 Done! Your relay will be available at:
-- **Relay WebSocket:** `wss://your.domain.com`
-- **Web Dashboard:** `https://dashboard.your.domain.com`
+- **Relay WebSocket:** `ws://<pub_key>.onion`
+- **Web Dashboard:** `http://<pub_key>.onion`
 
 ## 📦 Service Structure
 
@@ -160,8 +135,6 @@ docker compose down -v
 ```
 
 ## 🔐 Security
-
-- Caddy automatically generates and renews SSL certificates
 - HTTPS enforced (automatic HTTP to HTTPS redirection)
 - Relay only listens on Docker internal network
 - Database stored in encrypted persistent volume
