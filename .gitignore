@@ -1,5 +1,7 @@
-Caddyfile
-caddy_data
+# Ignore data directories
 relay_data
+tor_data
+
+# Ignore configuration files
 config.toml
 favicon.ico
