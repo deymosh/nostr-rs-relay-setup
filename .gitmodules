@@ -1,6 +1,6 @@
-[submodule "nostr-rs-relay"]
-	path = nostr-rs-relay
-	url = https://github.com/deymosh/nostr-rs-relay
 [submodule "nostr-relay-dashboard"]
 	path = nostr-relay-dashboard
 	url = https://github.com/deymosh/nostr-relay-dashboard
+[submodule "nostr-rs-relay"]
+	path = nostr-rs-relay
+	url = https://github.com/deymosh/nostr-rs-relay
